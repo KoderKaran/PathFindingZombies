@@ -39,12 +39,15 @@ class AStarZombie(Zombie):
         Zombie.__init__(self, display, x, y)
         self.sequence = []
         self.g_value = 0
+        self.last_dir = None
 
     def astar(self, other_x, other_y):
         if self.x < other_x:
             direction = False
+            self.last_dir = False
         else:
             direction = True
+            self.last_dir = True
         list = [(self.x+self.move_speed, self.y), (self.x-self.move_speed, self.y),
                 (self.x, self.y+self.move_speed), (self.x, self.y-self.move_speed)]
         lowest_f = 10000000
@@ -56,23 +59,35 @@ class AStarZombie(Zombie):
             if f_value < lowest_f:
                 lowest_f = f_value
                 lowest_point = (point[0], point[1])
-        pg.draw.line(self.display, sp.GREEN, (self.x, self.y), lowest_point)
         self.x = lowest_point[0]
         self.y = lowest_point[1]
         self.sequence.append(lowest_point)
         self.g_value+=self.move_speed
-        if len(self.sequence) > 2 and self.x!=other_x and self.y!=other_y:
-            self.walk(False, direction)
-        elif self.x == other_x and self.y == other_y:
-            print(self.sequence)
-            self.g_value = 0
-            self.walk(True, direction)
+        try:
+            tup_pos = (self.x, self.y)
+            tup_other = (other_x, other_y)
+            if tup_pos != tup_other:
+                self.walk(False, direction)
+            else:
+                print(self.sequence)
+                self.g_value = 0
+                self.walk(True, self.last_dir)
+        except:
+            pass
+
+        # if len(self.sequence) > 2 and self.x!=other_x and self.y!=other_y:
+        #     self.walk(False, direction)
+        # elif self.x == other_x and self.y == other_y:
+        #     print(self.sequence)
+        #     self.g_value = 0
+        #     self.walk(True, direction)
 
     def walk(self, found, direction):
         if not found:
+            pg.draw.lines(self.display, sp.BLACK, True, self.sequence)
             self.display.blit(pg.transform.flip(self.animate_walk(), direction, False), (self.x, self.y))
         else:
-            self.display.blit(self.animate_idle(), (self.x, self.y))
+            self.display.blit(pg.transform.flip(self.animate_walk(), direction, False), (self.x, self.y))
 
 
     # def astar(self, other_x, other_y):
