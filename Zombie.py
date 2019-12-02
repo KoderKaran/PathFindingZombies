@@ -53,7 +53,7 @@ class AStarZombie(Zombie):
         lowest_f = 10000000
         lowest_point = None
         for point in list:
-            h_value = abs(point[0] - other_x) + abs(point[1] - other_y)
+            h_value = max(abs(point[0] - other_x), abs(point[1] - other_y))
             f_value = h_value + self.g_value
             print(point)
             if f_value < lowest_f:

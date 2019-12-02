@@ -19,26 +19,28 @@ humans = pg.sprite.Group()
 zombie = zm.AStarZombie(display, 100, 0)
 
 doit = True
-des_x, des_y = ra.randint(0, sp.WIDTH-200), ra.randint(0, sp.HEIGHT-200)
-count = 0
+des_x, des_y = ra.randint(0, sp.WIDTH-50), ra.randint(0, sp.HEIGHT-50)
 while running:
     display.fill(sp.WHITE)
+    pg.draw.circle(display, sp.BLACK, (des_x, des_y), 10)
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
+    keys = pg.key.get_pressed()
     if zombie.x == des_x and zombie.y == des_y:
         zombie.walk(True, False)
     else:
         zombie.astar(des_x, des_y)
-        count += 1
-        print(count)
-    if count > 600:
-        print("changed!")
-        changex = ra.randint(-100, 100)
-        changey = ra.randint(-100, 100)
-        des_x += changex
-        des_y += changey
-        count = -1000000000
+
+    if keys[pg.K_LEFT]:
+        des_x -= 10
+    if keys[pg.K_RIGHT]:
+        des_x += 10
+    if keys[pg.K_UP]:
+        des_y -= 10
+    if keys[pg.K_DOWN]:
+        des_y += 10
+
     keys = pg.key.get_pressed()
     pg.display.flip()
     clock.tick(sp.FPS)
