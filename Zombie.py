@@ -25,7 +25,7 @@ class Zombie(pg.sprite.Sprite):
     def animate_idle(self):
         img = self.idle_img[self.idle_count//2]
         self.idle_count += 1
-        if self.idle_count >= 30:
+        if self.idle_count >= 28:
             self.idle_count = 0
         return img
 
@@ -55,7 +55,7 @@ class AStarZombie(Zombie):
         for point in list:
             h_value = max(abs(point[0] - other_x), abs(point[1] - other_y))
             f_value = h_value + self.g_value
-            print(point)
+            print("f:" + str(f_value))
             if f_value < lowest_f:
                 lowest_f = f_value
                 lowest_point = (point[0], point[1])
@@ -83,41 +83,12 @@ class AStarZombie(Zombie):
         #     self.walk(True, direction)
 
     def walk(self, found, direction):
+        try:
+            for index, value in enumerate(self.sequence):
+                pg.draw.line(self.display, sp.BLACK, self.sequence[index], self.sequence[index+1])
+        except IndexError:
+            pass
         if not found:
-            pg.draw.lines(self.display, sp.BLACK, True, self.sequence)
             self.display.blit(pg.transform.flip(self.animate_walk(), direction, False), (self.x, self.y))
         else:
-            self.display.blit(pg.transform.flip(self.animate_walk(), direction, False), (self.x, self.y))
-
-
-    # def astar(self, other_x, other_y):
-    #     open_points = []
-    #     close_points = []
-    #     curr_x, curr_y = self.x, self.y
-    #     open_points.append((curr_x, curr_y))
-    #     close_points.append((curr_x, curr_y))
-    #     heuristic = abs(curr_x-other_x) + abs(curr_y-other_y)
-    #     g_value = 0
-    #     f_value = heuristic + g_value
-    #     while curr_x != other_x and curr_y != other_y:
-    #         adjacent = [(curr_x+self.move_speed, curr_y), (curr_x-self.move_speed, curr_y),
-    #                     (curr_x, curr_y+self.move_speed), (curr_x, curr_y-self.move_speed)]
-    #         for point in adjacent:
-    #             print(point)
-    #             if point not in close_points and point not in open_points:
-    #                 open_points.append(point)
-    #                 g_this = g_value + self.move_speed
-    #                 h_this = abs(point[0]-other_x) + abs(point[1]-other_y)
-    #                 f_this = g_this + h_this
-    #                 if f_this < f_value:
-    #                     f_value = f_this
-    #                     curr_x, curr_y = point[0], point[1]
-    #             close_points.append((curr_x, curr_y))
-    #             g_value += self.move_speed
-    #     print(open_points)
-    #     for index, p in enumerate(close_points):
-    #         print(index,p)
-    #         try:
-    #             pg.draw.line(self.display, sp.GREEN, p, close_points[index+1])
-    #         except IndexError:
-    #             pass
+            self.display.blit(pg.transform.flip(self.animate_idle(), direction, False), (self.x, self.y))
