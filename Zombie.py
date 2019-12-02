@@ -25,7 +25,7 @@ class Zombie(pg.sprite.Sprite):
     def animate_idle(self):
         img = self.idle_img[self.idle_count//2]
         self.idle_count += 1
-        if self.idle_count>= 30:
+        if self.idle_count >= 30:
             self.idle_count = 0
         return img
 

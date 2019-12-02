@@ -17,12 +17,13 @@ zombies = pg.sprite.Group()
 humans = pg.sprite.Group()
 
 zombie = zm.AStarZombie(display, 100, 0)
-
-doit = True
 des_x, des_y = ra.randint(0, sp.WIDTH-50), ra.randint(0, sp.HEIGHT-50)
+human = hm.Human(display, des_x, des_y)
+doit = True
+
 while running:
     display.fill(sp.WHITE)
-    pg.draw.circle(display, sp.BLACK, (des_x, des_y), 10)
+    display.blit(human.animate_idle(), (des_x, des_y))
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
