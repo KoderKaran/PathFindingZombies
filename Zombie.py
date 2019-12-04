@@ -6,6 +6,9 @@ import Specs as sp
 class Zombie(pg.sprite.Sprite):
     def __init__(self, display, x, y):
         pg.sprite.Sprite.__init__(self)
+        self.rect = pg.Rect(x, y, 70, 100)
+        # self.image = pg.Surface(self.rect.size).convert()
+        # self.image.fill((255, 0, 0))
         self.display = display
         self.walk_count = 0
         self.idle_count = 0
@@ -55,7 +58,6 @@ class AStarZombie(Zombie):
         for point in list:
             h_value = max(abs(point[0] - other_x), abs(point[1] - other_y))
             f_value = h_value + self.g_value
-            print("f:" + str(f_value))
             if f_value < lowest_f:
                 lowest_f = f_value
                 lowest_point = (point[0], point[1])
@@ -69,18 +71,10 @@ class AStarZombie(Zombie):
             if tup_pos != tup_other:
                 self.walk(False, direction)
             else:
-                print(self.sequence)
                 self.g_value = 0
                 self.walk(True, self.last_dir)
         except:
             pass
-
-        # if len(self.sequence) > 2 and self.x!=other_x and self.y!=other_y:
-        #     self.walk(False, direction)
-        # elif self.x == other_x and self.y == other_y:
-        #     print(self.sequence)
-        #     self.g_value = 0
-        #     self.walk(True, direction)
 
     def walk(self, found, direction):
         try:

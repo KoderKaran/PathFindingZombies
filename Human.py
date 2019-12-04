@@ -1,11 +1,11 @@
 import pygame as pg
 import Images as im
-import Specs as sp
 
 
-class Human:
+class Human(pg.sprite.Sprite):
     def __init__(self, display, x, y):
         pg.sprite.Sprite.__init__(self)
+        self.rect = pg.Rect(x, y, 82, 100)
         self.display = display
         self.idle_count = 0
         self.idle_img = im.HUMAN_IDLE
